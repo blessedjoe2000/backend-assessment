@@ -5,7 +5,7 @@ const app = express();
 const port = 3000;
 
 app.use("/", (req, res) => {
-  res.status(200).json({ message: "welcome to to the Unsplash API" });
+  res.status(200).json({ message: "welcome to the Unsplash API" });
 });
 
 app.listen(port || process.env.PORT, () => {
