@@ -1,13 +1,14 @@
 import express from "express";
+import router from "./routes/photoRoutes.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
-const port = 3000;
+const port = 3000 || process.env.PORT;
 
-app.use("/", (req, res) => {
-  res.status(200).json({ message: "welcome to the Unsplash API" });
-});
+app.use(`/`, router);
 
-app.listen(port || process.env.PORT, () => {
+app.listen(port, () => {
   console.log(`Listening to port ${port}`);
 });
