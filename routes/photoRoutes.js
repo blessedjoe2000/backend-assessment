@@ -5,12 +5,12 @@ import {
   getPhotosByUser,
 } from "../controllers/photoController.js";
 
-const router = express.Router();
+const photoRouter = express.Router();
 
-router.get("/", getPhotos);
+photoRouter.get("/", getPhotos);
 
-router.get("/:id", getPhotoById);
+photoRouter.get("/:id", getPhotoById);
 
-router.get("/user/:username", getPhotosByUser);
+photoRouter.get("/user/:username", getPhotosByUser);
 
-export default router;
+export default photoRouter;
