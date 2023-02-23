@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import userRouter from "./routes/userRoutes.js";
 import favoritePhotoRoute from "./routes/favoritesRoutes.js";
+import errorHandler from "./middleware/errorMiddleware.js";
 dotenv.config();
 
 connectDb();
@@ -18,6 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(`/api/photos`, photoRouter);
 app.use("/api/users", userRouter);
 app.use("/api/favorites", favoritePhotoRoute);
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Listening to port ${port}`);
