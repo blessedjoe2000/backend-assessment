@@ -1,9 +1,19 @@
+
+//import dependency and functions
 import express from "express";
+import {
+  getPhotos,
+  getPhotoById,
+  getPhotosByUser,
+} from "../controllers/photoController.js";
 
-const router = express.Router();
+//initiate photo route
+const photoRouter = express.Router();
 
-router.get("/", (req, res) => {
-  res.status(200).json({ message: "welcome to the Unsplash API" });
-});
+//create API routes associated with photo route
+photoRouter.get("/", getPhotos);
+photoRouter.get("/:id", getPhotoById);
+photoRouter.get("/user/:username", getPhotosByUser);
 
-export default router;
+export default photoRouter;
+
