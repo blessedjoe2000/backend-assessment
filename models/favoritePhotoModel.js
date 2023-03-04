@@ -1,3 +1,4 @@
+//import mongoose for favorite photo schema
 import mongoose from "mongoose";
 
 const favoritePhotosModel = mongoose.Schema({

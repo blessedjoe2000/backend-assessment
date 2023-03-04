@@ -1,4 +1,4 @@
-//Import asyncHandler so that we can use it in our routes to trigger error handling middleware
+//Import dependecies abd functions
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -9,6 +9,7 @@ dotenv.config();
 export const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
+  //check for required field
   if (!username) {
     res.status(400);
     throw new Error("username is required");
@@ -24,6 +25,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error("password is required");
   }
 
+  //check for a user
   const userExist = await User.findOne({ email });
 
   if (userExist) {
@@ -31,15 +33,18 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Email already exist");
   }
 
+  //encrypting the password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
+  //create a user
   const user = await User.create({
     username,
     email,
     password: hashedPassword,
   });
 
+  //if user is created, print user's information
   if (user) {
     res.status(201).json({
       _id: user.id,
@@ -56,6 +61,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  //check for required field
   if (!email) {
     res.status(400);
     throw new Error("email is required");
@@ -66,8 +72,10 @@ export const loginUser = asyncHandler(async (req, res) => {
     throw new Error("password is required");
   }
 
+  //find a user
   const user = await User.findOne({ email });
 
+  //if user exist, compare the registration and login password
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
       _id: user.id,
@@ -91,7 +99,9 @@ export const loginUser = asyncHandler(async (req, res) => {
 //   res.json({ message: "logged out" });
 // });
 
+
 export const getUser = async (req, res) => {
+  //find a user user using protected route from auth middleware
   const { _id, username, email } = await User.findById(req.user.id);
 
   res.status(200).json({

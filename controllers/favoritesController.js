@@ -1,4 +1,4 @@
-//Import asyncHandler so that we can use it in our routes to trigger error handling middleware
+//Import functions
 import asyncHandler from "express-async-handler";
 import FavoritePhotos from "../models/favoritePhotoModel.js";
 import User from "../models/userModel.js";

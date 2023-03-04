@@ -1,4 +1,4 @@
-//Require axios to make API calls
+//import dependecies
 import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
