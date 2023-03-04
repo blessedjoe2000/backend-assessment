@@ -1,3 +1,4 @@
+
 //import dependency and functions
 import express from "express";
 import {
@@ -15,3 +16,4 @@ photoRouter.get("/:id", getPhotoById);
 photoRouter.get("/user/:username", getPhotosByUser);
 
 export default photoRouter;
+
