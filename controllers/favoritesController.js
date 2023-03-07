@@ -30,6 +30,19 @@ export const getFavoritePhotos = asyncHandler(async (req, res) => {
   res.status(200).json(favoritePhotos);
 });
 
+export const getFavPhotoById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const photo = await FavoritePhotos.findById(id);
+
+  if (!photo) {
+    res.status(400);
+    throw new Error("Photo not found");
+  }
+
+  res.status(200).json(photo);
+});
+
 export const deleteFavoritePhoto = asyncHandler(async (req, res) => {
   const { id } = req.params;
 

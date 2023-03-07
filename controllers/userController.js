@@ -89,16 +89,19 @@ export const loginUser = asyncHandler(async (req, res) => {
   res.status.json({ message: "user logged in" });
 });
 
-// export const logoutUser = asyncHandler(async (req, res) => {
-//   const { email } = req.body;
-//   const user = await User.findOne({ email });
+export const logoutUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
 
-//   if (user) {
-//     return await User.deleteOne(generateToken(user._id));
-//   }
-//   res.json({ message: "logged out" });
-// });
-
+  if (user) {
+    return await User.findByIdAndUpdate(req.user.id, {
+      id: user._id,
+      email: user.email,
+      username: user.username,
+      token: null,
+    });
+  }
+  res.json({ message: "logged out" });
+});
 
 export const getUser = async (req, res) => {
   //find a user user using protected route from auth middleware
