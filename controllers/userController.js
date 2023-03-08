@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import dotenv from "dotenv";
+// import BlackList from "../models/blackListModel.js";
 dotenv.config();
 
 export const registerUser = asyncHandler(async (req, res) => {
@@ -75,6 +76,15 @@ export const loginUser = asyncHandler(async (req, res) => {
   //find a user
   const user = await User.findOne({ email });
 
+  //find blacklisted token
+  // const blackListToken = await BlackList.find({ token });
+  // blackListToken.map((blacklist) => {
+  //   if (blacklist === user.token) {
+  //     res.status(401);
+  //     throw new Error("Not authorize, token invalidated");
+  //   }
+  // });
+
   //if user exist, compare the registration and login password
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
@@ -89,19 +99,12 @@ export const loginUser = asyncHandler(async (req, res) => {
   res.status.json({ message: "user logged in" });
 });
 
-export const logoutUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
+// export const logoutUser = asyncHandler(async (req, res) => {
+//   console.log(req.user.token);
+//   await BlackList.create({ token: generateToken(req.user._id) });
 
-  if (user) {
-    return await User.findByIdAndUpdate(req.user.id, {
-      id: user._id,
-      email: user.email,
-      username: user.username,
-      token: null,
-    });
-  }
-  res.json({ message: "logged out" });
-});
+//   res.json({ message: "logged out" });
+// });
 
 export const getUser = async (req, res) => {
   //find a user user using protected route from auth middleware

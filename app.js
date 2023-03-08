@@ -13,11 +13,9 @@ connectDb();
 
 import router from "./routes/photoRoutes.js";
 
-
 const app = express();
 
 const port = 3000 || process.env.PORT;
-
 
 //body parser for POST and PUT request
 app.use(express.json());
@@ -30,7 +28,6 @@ app.use("/api/favorites", favoritePhotoRoute);
 
 //import error handler
 app.use(errorHandler);
-
 
 //listening to the port and giving user information on what port it is connected to
 app.listen(port, () => {

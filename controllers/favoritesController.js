@@ -20,7 +20,7 @@ export const addPhoto = asyncHandler(async (req, res) => {
 });
 
 export const getFavoritePhotos = asyncHandler(async (req, res) => {
-  const favoritePhotos = await FavoritePhotos.find();
+  const favoritePhotos = await FavoritePhotos.find({ user: req.user.id });
 
   if (!favoritePhotos) {
     res.status(400);
@@ -40,6 +40,11 @@ export const getFavPhotoById = asyncHandler(async (req, res) => {
     throw new Error("Photo not found");
   }
 
+  if (photo.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
+
   res.status(200).json(photo);
 });
 
@@ -53,14 +58,7 @@ export const deleteFavoritePhoto = asyncHandler(async (req, res) => {
     throw new Error("Photo not found");
   }
 
-  const user = await User.findById(req.user.id);
-
-  if (!user) {
-    res.status(400);
-    throw new Error("user not found");
-  }
-
-  if (photo.user.toString() !== user.id) {
+  if (photo.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("Not authorized");
   }
@@ -82,14 +80,7 @@ export const updateFavoritePhoto = asyncHandler(async (req, res) => {
     throw new Error("Photo not found");
   }
 
-  const user = await User.findById(req.user.id);
-
-  if (!user) {
-    res.status(400);
-    throw new Error("user not found");
-  }
-
-  if (photo.user.toString() !== user.id) {
+  if (photo.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("Not authorized");
   }
