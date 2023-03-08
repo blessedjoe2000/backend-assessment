@@ -13,6 +13,9 @@ const userSchema = mongoose.Schema(
       type: String,
       required: { true: "enter password" },
     },
+    token: {
+      type: String,
+    },
   },
   {
     timestamps: true,
