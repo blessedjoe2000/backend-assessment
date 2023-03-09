@@ -7,40 +7,44 @@ const BASE_URL = `https://api.unsplash.com`;
 const access_key = `?client_id=${process.env.UNSPLASH_ACCESS_KEY}`;
 
 export const getPhotos = async (req, res) => {
-  try {
-    const result = await axios.get(`${BASE_URL + "/photos" + access_key}`);
+  await axios
+    .get(`${BASE_URL + "/photos" + access_key}`)
+    .then((result) => {
+      if (!result) {
+        res.status(500);
+        throw new Error(
+          json({ message: "Server error. Please try again later." })
+        );
+      }
 
-    if (!result) {
-      res.status(500);
-      throw new Error(
-        json({ message: "Server error. Please try again later." })
-      );
-    }
-
-    const photoRawUrl = result.data.map((data) => data.urls.raw);
-    res.status(200).json(photoRawUrl);
-  } catch (error) {
-    res.status(404).json({ message: "Not Found" });
-  }
+      const photoRawUrl = result.data.map((data) => data.urls.raw);
+      res.status(200).json(photoRawUrl);
+    })
+    .catch((error) => {
+      if (error.response.status === 404) {
+        res.json({ message: "Not Found" });
+      }
+    });
 };
 
 export const getPhotoById = async (req, res) => {
   const { id } = req.params;
-  try {
-    const result = await axios.get(
-      `${BASE_URL + "/photos" + "/" + id + access_key}`
-    );
-
-    if (!result) {
-      res.status(500);
-      throw new Error(
-        json({ message: "Server error. Please try again later." })
-      );
-    }
-    res.status(200).json(result.data);
-  } catch (error) {
-    res.status(404).json({ message: "Not Found" });
-  }
+  await axios
+    .get(`${BASE_URL + "/photos" + "/" + id + access_key}`)
+    .then((result) => {
+      if (!result) {
+        res.status(500);
+        throw new Error(
+          json({ message: "Server error. Please try again later." })
+        );
+      }
+      res.status(200).json(result.data);
+    })
+    .catch((error) => {
+      if (error.response.status === 404) {
+        res.json({ message: "Not Found" });
+      }
+    });
 };
 
 export const getPhotosByUser = (req, res) => {
@@ -57,6 +61,9 @@ export const getPhotosByUser = (req, res) => {
       });
     })
     .catch((error) => {
+      if (error.response.status === 404) {
+        res.json({ message: "Not Found" });
+      }
       res.status(500).json({ message: error.message });
     });
 };
