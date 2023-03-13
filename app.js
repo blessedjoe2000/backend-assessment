@@ -11,8 +11,6 @@ dotenv.config();
 
 connectDb();
 
-import router from "./routes/photoRoutes.js";
-
 const app = express();
 
 const port = 3000 || process.env.PORT;

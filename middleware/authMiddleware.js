@@ -2,6 +2,7 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import BlackList from "../models/blackListModel.js";
 
 const protect = asyncHandler(async (req, res, next) => {
   let token;
@@ -16,6 +17,16 @@ const protect = asyncHandler(async (req, res, next) => {
     const encoded = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = await User.findById(encoded.id).select("-password");
+
+    //find blacklisted token
+    const blackListedToken = await BlackList.find(req.user.token);
+    console.log("token", token);
+    blackListedToken.map((blackListToken) => {
+      if (token === blackListToken.token) {
+        res.status(401);
+        throw new Error("Not authorize, token invalidated");
+      }
+    });
 
     next();
   }

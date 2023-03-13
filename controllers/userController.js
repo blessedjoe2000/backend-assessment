@@ -76,18 +76,6 @@ export const loginUser = asyncHandler(async (req, res) => {
   //find a user
   const user = await User.findOne({ email });
 
-  // const storedToken = req.headers.authorization.split(" ")[1];
-
-  // //find blacklisted token
-  // const blackListedToken = await BlackList.find({ token });
-  // console.log("token list ", blackListedToken);
-  // blackListedToken.map((blackListToken) => {
-  //   if (blackListToken === storedToken) {
-  //     res.status(401);
-  //     throw new Error("Not authorize, token invalidated");
-  //   }
-  // });
-
   //if user exist, compare the registration and login password
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
